@@ -50,11 +50,11 @@ BayarKita/
 
 ### Menu UKT / SPP
 
-![](assets/pembayan-uang-kuliah.png)
+![](assets/pembayanuangkuliah.png)
 
 ### Riwayat Transaksi
 
-![](assets/riwayat-transaksi.png)
+![](assets/riwayattransaksi.png)
 
 ## Pengembang
 **Imam Wahidin**
