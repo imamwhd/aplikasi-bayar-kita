@@ -50,7 +50,7 @@ BayarKita/
 
 ### Menu UKT / SPP
 
-![](assets/pembayaran-uang-kuliah.png)
+![](assets/pembayan-uang-kuliah.png)
 
 ### Riwayat Transaksi
 
