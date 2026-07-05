@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BayarKita | Bill Payment & Top Up</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+
+                        primary:"#2563EB",
+
+                        secondary:"#3B82F6",
+
+                        accent:"#06B6D4"
+
+                    },
+
+                    fontFamily:{
+
+                        sans:["Plus Jakarta Sans","sans-serif"]
+
+                    },
+
+                    boxShadow:{
+
+                        card:"0 15px 35px rgba(0,0,0,.08)",
+
+                        glow:"0 20px 40px rgba(37,99,235,.25)"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans">
+
+  <nav class="sticky top-0 z-50">
+
+<div class="backdrop-blur-xl bg-white/80 border-b border-slate-200">
+
+<div class="max-w-7xl mx-auto px-8">
+
+<div class="h-20 flex justify-between items-center">
+
+<div class="flex items-center gap-4">
+
+    <!-- Tombol Back -->
+    <button onclick="goBack()"
+        class="w-11 h-11 rounded-xl bg-slate-100 hover:bg-blue-100 hover:text-blue-600 transition duration-200 flex items-center justify-center shadow-sm"
+        title="Kembali">
+        <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
+    <div
+        class="w-14 h-14 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 flex items-center justify-center shadow-glow">
+
+        <i class="fa-solid fa-wallet text-white text-2xl"></i>
+
+    </div>
+
+    <div>
+
+        <h2 class="text-2xl font-extrabold">
+            Bayar<span class="text-primary">Kita</span>
+        </h2>
+
+        <p class="text-xs text-slate-400">
+            Bill Payment & Top Up
+        </p>
+
+    </div>
+
+</div>
+
+<div class="hidden lg:flex items-center gap-2">
+
+<button onclick="switchView('dashboard')"
+class="px-5 py-2 rounded-xl hover:bg-blue-50 hover:text-primary font-semibold transition">
+
+Dashboard
+
+</button>
+
+<button onclick="switchView('tagihan')"
+class="px-5 py-2 rounded-xl hover:bg-blue-50 hover:text-primary font-semibold transition">
+
+Tagihan
+
+</button>
+
+<button onclick="switchView('spp')"
+class="px-5 py-2 rounded-xl hover:bg-blue-50 hover:text-primary font-semibold transition">
+
+SPP
+
+</button>
+
+<button onclick="switchView('pulsa')"
+class="px-5 py-2 rounded-xl hover:bg-blue-50 hover:text-primary font-semibold transition">
+
+Pulsa
+
+</button>
+
+<button onclick="switchView('riwayat')"
+class="px-5 py-2 rounded-xl hover:bg-blue-50 hover:text-primary font-semibold transition">
+
+Riwayat
+
+</button>
+
+</div>
+
+<div class="flex items-center gap-3">
+
+<button
+class="w-11 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 transition">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+</button>
+
+<button
+class="w-11 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 transition">
+
+<i class="fa-solid fa-bell"></i>
+
+</button>
+
+<button
+class="w-11 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 transition">
+
+<i class="fa-solid fa-moon"></i>
+
+</button>
+
+<div class="flex items-center gap-3 ml-2">
+
+<img
+src="https://ui-avatars.com/api/?background=2563EB&color=fff&name=Imam"
+class="w-11 h-11 rounded-full shadow">
+
+<div class="hidden md:block">
+
+<h3 class="font-bold">
+
+Imam Wahidin
+
+</h3>
+
+<p class="text-xs text-slate-500">
+
+Customer
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</nav>
+
+  <!-- KONTEN UTAMA APLIKASI -->
+  <main class="max-w-7xl mx-auto px-8 py-8 space-y-8">
+    
+    <!-- SECTION 1: DASHBOARD / BERANDA -->
+    <div id="view-dashboard" class="view-section space-y-6">
+      <!-- Info Saldo Utama -->
+      <div class="bg-white p-6 rounded-2xl shadow-md flex justify-between items-center border border-gray-200">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Halo, Selamat Datang! 👋</h1>
+        
+        </div>
+        <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 text-right min-w-[220px]">
+          <span class="text-xs text-indigo-600 font-bold uppercase tracking-wider block">Saldo Dompet</span>
+          <span id="saldo-display" class="text-2xl font-black text-indigo-900 block mt-1">Rp5.000.000</span>
+          <button onclick="resetSaldo()" class="text-xs bg-white text-indigo-600 font-bold px-3 py-1 rounded shadow-sm border mt-2 hover:bg-gray-50 transition">Reset Saldo</button>
+        </div>
+      </div>
+
+      <!-- Grid Tombol Akses Cepat -->
+      <div class="grid grid-cols-4 gap-6">
+        <div onclick="switchView('tagihan')" class="bg-white p-6 rounded-2xl shadow-sm text-center border border-gray-200 hover:shadow-md transition cursor-pointer group">
+          <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition"><i class="fa-solid fa-bolt text-xl"></i></div>
+          <span class="font-bold text-gray-800">Tagihan Umum</span>
+        </div>
+        <div onclick="switchView('spp')" class="bg-white p-6 rounded-2xl shadow-sm text-center border border-gray-200 hover:shadow-md transition cursor-pointer group">
+          <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition"><i class="fa-solid fa-graduation-cap text-xl"></i></div>
+          <span class="font-bold text-gray-800">Uang Kuliah</span>
+        </div>
+        <div onclick="switchView('pulsa')" class="bg-white p-6 rounded-2xl shadow-sm text-center border border-gray-200 hover:shadow-md transition cursor-pointer group">
+          <div class="w-14 h-14 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition"><i class="fa-solid fa-mobile-screen text-xl"></i></div>
+          <span class="font-bold text-gray-800">Pulsa & Data</span>
+        </div>
+        <div onclick="switchView('riwayat')" class="bg-white p-6 rounded-2xl shadow-sm text-center border border-gray-200 hover:shadow-md transition cursor-pointer group">
+          <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition"><i class="fa-solid fa-history text-xl"></i></div>
+          <span class="font-bold text-gray-800">Riwayat Pembelian</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: BAYAR TAGIHAN (Optimasi Desktop - NIM Ganjil) -->
+    <div id="view-tagihan" class="view-section hidden space-y-6">
+      <div class="flex flex-col lg:flex-row gap-6">
+        
+        <!-- KOLOM KIRI: PILIHAN LAYANAN & INPUT ID (Lebar 40% di Desktop) -->
+        <div class="w-full lg:w-2/5 bg-white p-6 rounded-2xl shadow-sm border border-gray-200 h-fit">
+          <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+            <i class="fa-solid fa-file-invoice-dollar text-indigo-600"></i>
+            <span>Pilih Jenis Tagihan</span>
+          </h2>
+          
+          <!-- Tombol Pilihan Layanan ala Desktop Card -->
+          <div class="grid grid-cols-3 gap-2 mb-6">
+            <button onclick="setTagihanType('pln')" id="btn-type-pln" class="tagihan-type-btn p-3 border-2 border-indigo-600 bg-indigo-50 text-indigo-700 rounded-xl flex flex-col items-center justify-center transition font-bold text-xs">
+              <i class="fa-solid fa-bolt text-lg mb-1"></i><span>PLN</span>
+            </button>
+            <button onclick="setTagihanType('pdam')" id="btn-type-pdam" class="tagihan-type-btn p-3 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition font-medium text-gray-600 text-xs hover:bg-gray-50">
+              <i class="fa-solid fa-faucet-drip text-lg mb-1"></i><span>PDAM</span>
+            </button>
+            <button onclick="setTagihanType('internet')" id="btn-type-internet" class="tagihan-type-btn p-3 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition font-medium text-gray-600 text-xs hover:bg-gray-50">
+              <i class="fa-solid fa-wifi text-lg mb-1"></i><span>Internet</span>
+            </button>
+          </div>
+
+          <!-- Form Input Nomor Pelanggan -->
+          <div class="space-y-4">
+            <div>
+              <label id="label-id-pelanggan" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Nomor Meter / ID Pelanggan PLN</label>
+              <input type="text" id="input-id-pelanggan" placeholder="Contoh: 123456789012 (12 Digit)" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono tracking-wider">
+              <span id="error-tagihan" class="text-xs text-rose-600 font-medium mt-1 hidden block"></span>
+            </div>
+
+            <button onclick="cekTagihanAction()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <span>Cek Tagihan</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- KOLOM KANAN: DETAIL HASIL & METODE BAYAR (Lebar 60% di Desktop) -->
+        <div class="w-full lg:w-3/5 space-y-4">
+          
+          <!-- Keadaan Awal (Kosong) -->
+          <div id="tagihan-placeholder" class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400">
+            <i class="fa-solid fa-search text-4xl mb-3 block text-gray-300"></i>
+            <p class="font-medium text-sm">Silakan masukkan nomor pelanggan and klik Cek Tagihan.</p>
+          </div>
+
+          <!-- Efek Loading (Skeleton Screen Beranimasi) -->
+          <div id="tagihan-loading" class="bg-white p-6 rounded-2xl border border-gray-200 space-y-4 hidden animate-pulse">
+            <div class="h-5 bg-gray-200 rounded w-1/3"></div>
+            <div class="space-y-2">
+              <div class="h-4 bg-gray-200 rounded w-full"></div>
+              <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+            </div>
+          </div>
+
+          <!-- Hasil Pencarian & Opsi Pembayaran -->
+          <div id="tagihan-result-box" class="hidden space-y-4">
+            <!-- Box Data Pelanggan -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 class="text-md font-bold text-gray-900 border-b pb-3 mb-4 flex justify-between items-center">
+                <span>Rincian Informasi Tagihan</span>
+                <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded" id="badge-layanan">PLN</span>
+              </h3>
+              <div class="grid grid-cols-2 gap-4 text-sm font-medium" id="tagihan-detail-render">
+                <!-- Data Pelanggan dimasukkan via JavaScript secara otomatis -->
+              </div>
+            </div>
+
+            <!-- Box Metode Pembayaran (Wajib 3 Pilihan) -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 class="text-md font-bold text-gray-900 mb-4">Pilih Metode Pembayaran</h3>
+              <div class="grid grid-cols-3 gap-3">
+                <label class="border p-4 rounded-xl flex items-start space-x-2 cursor-pointer hover:bg-gray-50 transition">
+                  <input type="radio" name="metode-bayar" value="Virtual Account" checked class="mt-1 accent-indigo-600">
+                  <div class="text-xs font-bold text-gray-800">Virtual Account<span class="text-[10px] text-gray-400 block font-normal">BCA / Mandiri</span></div>
+                </label>
+                <label class="border p-4 rounded-xl flex items-start space-x-2 cursor-pointer hover:bg-gray-50 transition">
+                  <input type="radio" name="metode-bayar" value="QRIS" class="mt-1 accent-indigo-600">
+                  <div class="text-xs font-bold text-gray-800">QRIS<span class="text-[10px] text-gray-400 block font-normal">Gopay / ShopeePay</span></div>
+                </label>
+                <label class="border p-4 rounded-xl flex items-start space-x-2 cursor-pointer hover:bg-gray-50 transition">
+                  <input type="radio" name="metode-bayar" value="Tunai Di Kasir" class="mt-1 accent-indigo-600">
+                  <div class="text-xs font-bold text-gray-800">Indomaret/Alfamart<span class="text-[10px] text-gray-400 block font-normal">Melalui Kasir</span></div>
+                </label>
+              </div>
+
+              <button onclick="prosesBayarTagihan()" class="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition flex items-center justify-center space-x-2 shadow-md">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Konfirmasi & Bayar Sekarang</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: BAYAR SPP / UKT (Sistem Checklist) -->
+    <div id="view-spp" class="view-section hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        
+        <!-- Header Form Pencarian Mahasiswa -->
+        <div class="border-b pb-4 mb-6">
+          <h2 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+            <i class="fa-solid fa-graduation-cap text-indigo-600"></i>
+            <span>Pembayaran Uang Kuliah Tunggal (UKT) / SPP</span>
+          </h2>
+          <p class="text-xs text-gray-500 mt-1">Masukkan Nomor Induk Mahasiswa (NIM) untuk memeriksa daftar tagihan semester.</p>
+        </div>
+
+        <!-- Form Input NIM -->
+        <div class="flex flex-col sm:flex-row gap-3 max-w-xl mb-6">
+          <div class="flex-1">
+            <input type="text" id="input-nim-spp" placeholder="Masukkan NIM Anda (Contoh: 21001032)" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono tracking-wider text-sm">
+            <span id="error-spp" class="text-xs text-rose-600 font-medium mt-1 hidden block"></span>
+          </div>
+          <button onclick="cekSppAction()" class="h-fit bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-sm whitespace-nowrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Cari Data Mahasiswa</span>
+          </button>
+        </div>
+
+        <!-- AREA HASIL PENCARIAN -->
+        <!-- Keadaan Awal -->
+        <div id="spp-placeholder" class="border border-gray-100 rounded-xl p-12 text-center text-gray-400 bg-gray-50/50">
+          <i class="fa-solid fa-id-card text-4xl mb-3 block text-gray-300"></i>
+          <p class="font-medium text-sm">Data mahasiswa dan daftar semester akan muncul di sini setelah NIM diperiksa.</p>
+        </div>
+
+        <!-- Efek Loading Skeleton -->
+        <div id="spp-loading" class="space-y-4 hidden animate-pulse">
+          <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+          <div class="h-32 bg-gray-100 rounded-xl"></div>
+        </div>
+
+        <!-- Kotak Data & Tabel Checklist -->
+        <div id="spp-result-box" class="hidden space-y-6">
+          
+          <!-- Ringkasan Profil Mahasiswa -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 text-sm font-medium">
+            <div><span class="text-gray-400 block text-xs">Nama Mahasiswa</span><span class="text-gray-900 font-bold" id="txt-spp-nama">-</span></div>
+            <div><span class="text-gray-400 block text-xs">Program Studi</span><span class="text-gray-800" id="txt-spp-prodi">-</span></div>
+            <div><span class="text-gray-400 block text-xs">Angkatan Kuliah</span><span class="text-gray-800" id="txt-spp-angkatan">-</span></div>
+          </div>
+
+          <!-- Tabel Daftar Semester (Checklist) -->
+          <div class="overflow-x-auto border border-gray-200 rounded-xl">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-bold text-xs uppercase tracking-wider">
+                  <th class="p-4 w-12 text-center">Pilih</th>
+                  <th class="p-4">Semester / Komponen</th>
+                  <th class="p-4">Batas Tenggat</th>
+                  <th class="p-4 text-right">Jumlah Tagihan</th>
+                </tr>
+              </thead>
+              <tbody id="spp-table-body" class="divide-y divide-gray-200 font-medium text-gray-700">
+                <!-- Baris tagihan di-render lewat JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Bagian Total Akumulasi & Tombol Eksekusi -->
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between p-6 bg-gray-50 rounded-xl border border-gray-200 gap-4">
+            <div>
+              <span class="text-xs font-bold text-gray-500 uppercase tracking-wider block">Total yang Dipilih:</span>
+              <div class="text-2xl font-black text-indigo-700 mt-1" id="txt-spp-total">Rp 0</div>
+              <span class="text-[11px] text-gray-400 block mt-0.5" id="txt-spp-count">0 semester siap dibayar</span>
+            </div>
+            
+            <button onclick="prosesBayarSpp()" id="btn-spp-bayar" disabled class="bg-gray-400 text-white font-bold py-3 px-8 rounded-xl transition flex items-center justify-center space-x-2 shadow-md cursor-not-allowed text-base">
+              <i class="fa-solid fa-money-bill-wave"></i>
+              <span>Bayar Semester Dipilih</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 4: PULSA & DATA (Optimasi Grid Desktop) -->
+    <div id="view-pulsa" class="view-section hidden space-y-6">
+      <div class="flex flex-col lg:flex-row gap-6">
+        
+        <!-- KOLOM KIRI: INPUT NOMOR & OPERATOR (Lebar 40% di Desktop) -->
+        <div class="w-full lg:w-2/5 bg-white p-6 rounded-2xl shadow-sm border border-gray-200 h-fit">
+          <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+            <i class="fa-solid fa-mobile-screen text-indigo-600"></i>
+            <span>Isi Pulsa & Paket Data</span>
+          </h2>
+
+          <!-- Jenis Layanan (Pulsa / Data) -->
+          <div class="flex bg-gray-100 p-1 rounded-xl mb-4">
+            <button onclick="setPulsaService('pulsa')" id="btn-srv-pulsa" class="flex-1 text-center py-2 text-sm font-bold rounded-lg bg-white text-indigo-700 shadow-sm transition">
+              Pulsa Reguler
+            </button>
+            <button onclick="setPulsaService('data')" id="btn-srv-data" class="flex-1 text-center py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 transition">
+              Paket Data
+            </button>
+          </div>
+          
+          <!-- Input Nomor Handphone -->
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Nomor Handphone</label>
+              <div class="relative">
+                <input type="text" id="input-phone" oninput="detectOperator()" placeholder="Contoh: 0812xxxxxxx" class="w-full pl-4 pr-24 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono tracking-wider text-lg">
+                <!-- Indikator Logo Operator Otomatis -->
+                <div id="operator-badge" class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-black text-indigo-700 bg-indigo-50 px-2 py-1 rounded border border-indigo-200 uppercase tracking-wider hidden">
+                  -
+                </div>
+              </div>
+              <span id="error-pulsa" class="text-xs text-rose-600 font-medium mt-1 hidden block"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KOLOM KANAN: PILIHAN NOMINAL & DETAIL (Lebar 60% di Desktop) -->
+        <div class="w-full lg:w-3/5 space-y-4">
+          
+          <!-- Keadaan Awal (Belum isi Nomor) -->
+          <div id="pulsa-placeholder" class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400">
+            <i class="fa-solid fa-phone-volume text-4xl mb-3 block text-gray-300"></i>
+            <p class="font-medium text-sm">Silakan masukkan nomor handphone yang valid untuk memuat pilihan produk.</p>
+          </div>
+
+          <!-- Grid Pilihan Paket/Nominal -->
+          <div id="pulsa-grid-box" class="hidden space-y-4">
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 class="text-md font-bold text-gray-900 mb-4 flex justify-between items-center">
+                <span>Pilih Nominal / Paket Produk</span>
+                <span id="txt-operator-name" class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded font-bold uppercase">-</span>
+              </h3>
+              
+              <!-- Container Grid Item Terisi Otomatis Lewat JS -->
+              <div id="pulsa-items-render" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Rendered Items dari JS masuk ke sini -->
+              </div>
+            </div>
+
+            <!-- Konfirmasi Pembayaran Dompet Internal -->
+            <div id="pulsa-action-box" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm hidden">
+              <div class="flex justify-between items-center text-sm border-b pb-3 mb-4">
+                <div>
+                  <span class="text-gray-400 block text-xs">Produk Terpilih:</span>
+                  <span id="txt-pulsa-selected" class="font-bold text-gray-800">-</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-gray-400 block text-xs">Harga Total:</span>
+                  <span id="txt-pulsa-price" class="font-black text-indigo-700 text-lg">-</span>
+                </div>
+              </div>
+
+              <button onclick="prosesBayarPulsa()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition flex items-center justify-center space-x-2 shadow-md">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Bayar Menggunakan Saldo Dompet</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: RIWAYAT PEMBELIAN (Desain Tabel Desktop) -->
+    <div id="view-riwayat" class="view-section hidden space-y-6">
+      
+      <!-- Ringkasan Filter & Statistik Ringkas -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-2xl border border-gray-200 shadow-sm gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+            <i class="fa-solid fa-clock-rotate-left text-indigo-600"></i>
+            <span>Riwayat Transaksi</span>
+          </h2>
+          <p class="text-xs text-gray-500 mt-1">Pantau semua status pembayaran dan pengeluaran akun Anda.</p>
+        </div>
+        
+        <!-- Filter Kategori Kustom -->
+        <div class="flex bg-gray-100 p-1 rounded-xl text-sm font-semibold">
+          <button onclick="filterRiwayat('semua')" id="btn-filter-semua" class="px-4 py-2 rounded-lg bg-white text-indigo-700 shadow-sm transition">
+            Semua
+          </button>
+          <button onclick="filterRiwayat('tagihan')" id="btn-filter-tagihan" class="px-4 py-2 rounded-lg text-gray-600 hover:text-gray-900 transition">
+            Tagihan
+          </button>
+          <button onclick="filterRiwayat('spp')" id="btn-filter-spp" class="px-4 py-2 rounded-lg text-gray-600 hover:text-gray-900 transition">
+            SPP/UKT
+          </button>
+          <button onclick="filterRiwayat('pulsa')" id="btn-filter-pulsa" class="px-4 py-2 rounded-lg text-gray-600 hover:text-gray-900 transition">
+            Pulsa/Data
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabel Riwayat Utama -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-bold text-xs uppercase tracking-wider">
+                <th class="p-4">Tanggal & Waktu</th>
+                <th class="p-4">ID Transaksi</th>
+                <th class="p-4">Kategori</th>
+                <th class="p-4">Deskripsi Produk</th>
+                <th class="p-4 text-right">Total Bayar</th>
+                <th class="p-4 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody id="riwayat-table-body" class="divide-y divide-gray-200 font-medium text-gray-700">
+              <!-- State Data Kosong (Akan diubah dinamis via JavaScript) -->
+              <tr id="riwayat-empty-row">
+                <td colspan="6" class="p-12 text-center text-gray-400">
+                  <i class="fa-solid fa-receipt text-4xl mb-3 block text-gray-300"></i>
+                  <p class="font-medium text-sm">Belum ada riwayat transaksi saat ini.</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Container Notifikasi Toast -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- Hubungkan ke File JavaScript -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
